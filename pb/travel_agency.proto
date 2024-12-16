@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+option go_package = "github.com/QBC8-Group5/gholibaba_pb/pb";
+
+import "google/protobuf/timestamp.proto";
+
+enum AgencyStatus {
+  AgencyStatus_Active = 0;
+  AgencyStatus_Blocked = 1;
+}
+
+message Agency {
+  string agency_id = 1;
+  string owner_user_id = 2;
+  string agency_name = 3;
+  AgencyStatus status = 4;
+}
+
+enum TourStatus {
+  TourStatus_Active = 0;
+  TourStatus_Archived = 1;
+}
+
+message Tour {
+  string tour_id = 1;
+  string agency_id = 2;
+  google.protobuf.Timestamp release_date = 3;
+  TourStatus status = 4;
+}
+
+message TourPackage {
+  string package_id = 1;
+  string tour_id = 2;
+  string outbound_trip_id = 3;
+  string return_trip_id = 4;
+  string hotel_id = 5;
+  float package_price = 6;
+}
+
+message CreateTourRequest {
+  Tour tour = 1;
+}
+
+message CreateTourResponse {
+  bool success = 1;
+  string tour_id = 2;
+}
+
+message CreateTourPackageRequest {
+  TourPackage package = 1;
+}
+
+message CreateTourPackageResponse {
+  bool success = 1;
+  string package_id = 2;
+}
+
+message ListToursRequest {
+  string agency_id = 1;
+}
+
+message ListToursResponse {
+  repeated Tour tours = 1;
+}
+
+service TravelAgencyService {
+  rpc CreateTour(CreateTourRequest) returns (CreateTourResponse);
+  rpc CreateTourPackage(CreateTourPackageRequest) returns (CreateTourPackageResponse);
+  rpc ListTours(ListToursRequest) returns (ListToursResponse);
+}

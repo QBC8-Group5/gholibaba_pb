@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+option go_package = "github.com/QBC8-Group5/gholibaba_pb/pb";
+
+import "google/protobuf/timestamp.proto";
+
+enum TerminalType {
+  TerminalType_Airport = 0;
+  TerminalType_RailStation = 1;
+  TerminalType_BusTerminal = 2;
+  TerminalType_Port = 3;
+}
+message Terminal {
+  string terminal_id = 1;
+  string terminal_name = 2;
+  TerminalType terminal_type = 3;
+  string location = 4;
+}
+
+message Route {
+  string route_id = 1;
+  string from_terminal_id = 2;
+  string to_terminal_id = 3;
+  float distance = 4;
+  string code = 5;
+}
+
+message CreateTerminalRequest {
+  Terminal terminal = 1;
+}
+
+message CreateTerminalResponse {
+  bool success = 1;
+  string terminal_id = 2;
+}
+
+message CreateRouteRequest {
+  Route route = 1;
+}
+
+message CreateRouteResponse {
+  bool success = 1;
+  string route_id = 2;
+}
+
+message GetRouteInfoRequest {
+  string route_id = 1;
+}
+
+message GetRouteInfoResponse {
+  Route route = 1;
+}
+
+service RouteTerminalService {
+  rpc CreateTerminal(CreateTerminalRequest) returns (CreateTerminalResponse);
+  rpc CreateRoute(CreateRouteRequest) returns (CreateRouteResponse);
+  rpc GetRouteInfo(GetRouteInfoRequest) returns (GetRouteInfoResponse);
+}

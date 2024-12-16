@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+option go_package = "github.com/QBC8-Group5/gholibaba_pb/pb";
+
+import "google/protobuf/timestamp.proto";
+
+message Wallet {
+  string wallet_id = 1;
+  string owner_user_id = 2;
+  float balance = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+enum InvoiceStatus{
+  InvoiceStatus_Pending = 0;
+  InvoiceStatus_Paid = 1;
+  InvoiceStatus_Cancelled = 2;
+}
+
+message Invoice {
+  string invoice_id = 1;
+  string user_id = 2;
+  float amount = 3;
+  string currency = 4;
+  InvoiceStatus status = 5;
+  google.protobuf.Timestamp created_at = 6;
+}
+
+enum InvoiceItemType {
+  InvoiceItemType_Trip = 0;
+  InvoiceItemType_Hotel = 1;
+  InvoiceItemType_Tour = 2;
+}
+
+message InvoiceItem {
+  string item_id = 1;
+  string invoice_id = 2;
+  InvoiceItemType item_type = 3;
+  string item_ref_id = 4;
+  float amount = 5;
+}
+
+message CreateInvoiceRequest {
+  string user_id = 1;
+  repeated InvoiceItem items = 2;
+}
+
+message CreateInvoiceResponse {
+  bool success = 1;
+  string invoice_id = 2;
+  float total_amount = 3;
+}
+
+enum PayInvoiceRequestMethod {
+    PayInvoiceRequestMethod_Wallet = 0;
+    PayInvoiceRequestMethod_Bank = 1;
+}
+
+message PayInvoiceRequest {
+  string invoice_id = 1;
+  PayInvoiceRequestMethod payment_method = 2;
+}
+
+message PayInvoiceResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message DistributeRevenueRequest {
+  string invoice_id = 1;
+}
+
+message DistributeRevenueResponse {
+  bool success = 1;
+}
+
+service PaymentService {
+  rpc CreateInvoice(CreateInvoiceRequest) returns (CreateInvoiceResponse);
+  rpc PayInvoice(PayInvoiceRequest) returns (PayInvoiceResponse);
+  rpc DistributeRevenue(DistributeRevenueRequest) returns (DistributeRevenueResponse);
+}

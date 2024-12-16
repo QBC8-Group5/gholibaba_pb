@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+option go_package = "github.com/QBC8-Group5/gholibaba_pb/pb";
+
+import "google/protobuf/timestamp.proto";
+
+enum BankStatus {
+  BankStatus_Active = 0;
+  BankStatus_Blocked = 1;
+}
+
+message BankAccount {
+  string bank_account_id = 1;
+  string user_id = 2;
+  string iban = 3;
+  string bank_name = 4;
+  BankStatus status = 5;
+}
+
+enum BankCardStatus {
+  BankCardStatus_Active = 0;
+  BankCardStatus_Blocked = 1;
+}
+
+message BankCard {
+  string card_id = 1;
+  string bank_account_id = 2;
+  string card_number = 3;
+  string expiry_date = 4;
+  string cvc = 5;
+  BankCardStatus status = 6;
+}
+
+enum BankTransactionStatus {
+  BankTransactionStatus_Initiated = 0;
+  BankTransactionStatus_Success = 1;
+  BankTransactionStatus_Failed = 2;
+}
+
+message BankTransaction {
+  string bank_tx_id = 1;
+  string from_account_id = 2;
+  string to_account_id = 3;
+  float amount = 4;
+  BankTransactionStatus status = 5;
+  google.protobuf.Timestamp created_at = 6;
+}
+
+message LinkBankAccountRequest {
+  string user_id = 1;
+  string iban = 2;
+  string bank_name = 3;
+}
+
+message LinkBankAccountResponse {
+  bool success = 1;
+  string bank_account_id = 2;
+}
+
+message InitiateBankTransferRequest {
+  string from_account_id = 1;
+  string to_account_id = 2;
+  float amount = 3;
+}
+
+message InitiateBankTransferResponse {
+  bool success = 1;
+  string bank_tx_id = 2;
+}
+
+service BankService {
+  rpc LinkBankAccount(LinkBankAccountRequest) returns (LinkBankAccountResponse);
+  rpc InitiateBankTransfer(InitiateBankTransferRequest) returns (InitiateBankTransferResponse);
+}

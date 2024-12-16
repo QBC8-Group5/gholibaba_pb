@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+option go_package = "github.com/QBC8-Group5/gholibaba_pb/pb";
+
+import "google/protobuf/timestamp.proto";
+
+enum VehicleType{
+  VehicleType_Plane = 0;
+  VehicleType_Bus = 1;
+  VehicleType_Train = 2;
+  VehicleType_Ship = 3;
+}
+
+enum VehicleStatus{
+  VehicleStatus_Active = 0;
+  VehicleStatus_Inactive = 1;
+}
+
+message Vehicle {
+  string vehicle_id = 1;
+  string owner_user_id = 2;
+  VehicleType vehicle_type = 3;
+  int32 capacity = 4;
+  float speed = 5;
+  google.protobuf.Timestamp manufacture_date = 6;
+  float hourly_cost = 7;
+  VehicleStatus status = 8;
+}
+
+enum VehicleRequestStatus {
+  VehicleRequestStatus_Pending = 0;
+  VehicleRequestStatus_Matched = 1;
+  VehicleRequestStatus_Rejected = 2;
+}
+
+message VehicleRequest {
+  string request_id = 1;
+  string company_id = 2;
+  string vehicle_type = 3;
+  string start_terminal_id = 4;
+  string end_terminal_id = 5;
+  google.protobuf.Timestamp start_time = 6;
+  int32 min_passenger_count = 7;
+  string status = 8;
+}
+
+message VehicleMatch {
+  string match_id = 1;
+  string request_id = 2;
+  string vehicle_id = 3;
+}
+
+message CreateVehicleRequest {
+  Vehicle vehicle = 1;
+}
+
+message CreateVehicleResponse {
+  bool success = 1;
+  string vehicle_id = 2;
+}
+
+message RequestVehicleForTripRequest {
+  VehicleRequest vehicle_request = 1;
+}
+
+message RequestVehicleForTripResponse {
+  bool success = 1;
+  string request_id = 2;
+}
+
+message MatchVehicleRequest {
+  string request_id = 1;
+}
+
+message MatchVehicleResponse {
+  bool success = 1;
+  string vehicle_id = 2;
+}
+
+service VehicleManagementService {
+  rpc CreateVehicle(CreateVehicleRequest) returns (CreateVehicleResponse);
+  rpc RequestVehicleForTrip(RequestVehicleForTripRequest) returns (RequestVehicleForTripResponse);
+  rpc MatchVehicle(MatchVehicleRequest) returns (MatchVehicleResponse);
+}

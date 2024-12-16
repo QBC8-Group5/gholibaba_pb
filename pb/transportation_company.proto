@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+option go_package = "github.com/QBC8-Group5/gholibaba_pb/pb";
+
+import "google/protobuf/timestamp.proto";
+
+enum CompanyType {
+  CompanyType_Airline = 0;
+  CompanyType_Bus = 1;
+  CompanyType_Rail = 2;
+  CompanyType_Ship = 3;
+}
+
+enum CompanyStatus {
+  CompanyStatus_Active = 0;
+  CompanyStatus_Blocked = 1;
+}
+
+message Company {
+  string company_id = 1;
+  string owner_user_id = 2;
+  string company_name = 3;
+  CompanyType company_type = 4;
+  CompanyStatus status = 5;
+}
+
+enum  TripStatus {
+  TripStatus_Scheduled = 0;
+  TripStatus_Cancelled = 1;
+  TripStatus_Completed = 2;
+}
+
+message Trip {
+  string trip_id = 1;
+  string company_id = 2;
+  string vehicle_id = 3;
+  string route_id = 4;
+  TripStatus status = 5;
+  google.protobuf.Timestamp departure_time = 6;
+  google.protobuf.Timestamp arrival_time = 7;
+  float base_fare = 8;
+}
+
+enum UserType {
+  UserType_NormalUser = 0;
+  UserType_Agency = 1;
+}
+
+message Tariff {
+  string tariff_id = 1;
+  string trip_id = 2;
+  UserType user_type = 3;
+  float price = 4;
+}
+
+message TechnicalTeam {
+  string tech_team_id = 1;
+  string company_id = 2;
+  string team_name = 3;
+  int32 member_count = 4;
+}
+
+message AssignTechnicalTeamRequest {
+  string trip_id = 1;
+  string tech_team_id = 2;
+}
+
+message AssignTechnicalTeamResponse {
+  bool success = 1;
+}
+
+message CreateTripRequest {
+  Trip trip = 1;
+}
+
+message CreateTripResponse {
+  bool success = 1;
+  string trip_id = 2;
+}
+
+message UpdateTripStatusRequest {
+  string trip_id = 1;
+  string new_status = 2;
+}
+
+message UpdateTripStatusResponse {
+  bool success = 1;
+}
+
+message ListCompanyTripsRequest {
+  string company_id = 1;
+}
+
+message ListCompanyTripsResponse {
+  repeated Trip trips = 1;
+}
+
+service TransportationCompanyService {
+  rpc CreateTrip(CreateTripRequest) returns (CreateTripResponse);
+  rpc UpdateTripStatus(UpdateTripStatusRequest) returns (UpdateTripStatusResponse);
+  rpc AssignTechnicalTeam(AssignTechnicalTeamRequest) returns (AssignTechnicalTeamResponse);
+  rpc ListCompanyTrips(ListCompanyTripsRequest) returns (ListCompanyTripsResponse);
+}

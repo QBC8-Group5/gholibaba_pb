@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+option go_package = "github.com/QBC8-Group5/gholibaba_pb/pb";
+
+import "google/protobuf/timestamp.proto";
+
+enum EntityType {
+  EntityType_User = 0;
+  EntityType_Company = 1;
+  EntityType_Hotel = 2;
+  EntityType_Agency = 3;
+  EntityType_Vehicle = 4;
+}
+
+message BannedEntity {
+  string ban_id = 1;
+  EntityType entity_type = 2;
+  string entity_id = 3;
+  string reason = 4;
+  google.protobuf.Timestamp start_at = 5;
+  google.protobuf.Timestamp end_at = 6;
+}
+
+message BanEntityRequest {
+  string entity_type = 1;
+  string entity_id = 2;
+  string reason = 3;
+}
+
+message BanEntityResponse {
+  bool success = 1;
+}
+
+message UnbanEntityRequest {
+  string ban_id = 1;
+}
+
+message UnbanEntityResponse {
+  bool success = 1;
+}
+
+message CheckHistoryRequest {
+  string user_id = 1;
+  // TODO: please add more filters
+}
+
+message CheckHistoryResponse {
+  string report = 1;
+}
+
+service AdminManagementService {
+  rpc BanEntity(BanEntityRequest) returns (BanEntityResponse);
+  rpc UnbanEntity(UnbanEntityRequest) returns (UnbanEntityResponse);
+  rpc CheckHistory(CheckHistoryRequest) returns (CheckHistoryResponse);
+}

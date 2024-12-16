@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+option go_package = "github.com/QBC8-Group5/gholibaba_pb/pb";
+
+import "google/protobuf/timestamp.proto";
+
+message Profile {
+  string profile_id = 1;
+  string user_id = 2;
+  string first_name = 3;
+  string last_name = 4;
+  string phone_number = 5;
+  string address = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+enum NotificationStatus {
+    NotificationStatus_Unread=0;
+    NotificationStatus_Read = 1;
+}
+
+message Notification {
+  string notification_id = 1;
+  string user_id = 2;
+  string type = 3;
+  string message = 4;
+  NotificationStatus status = 5;
+  google.protobuf.Timestamp created_at = 6;
+}
+
+message UserPreference {
+  string preference_id = 1;
+  string user_id = 2;
+  bool notify_on_ticket_availability = 3;
+  bool notify_on_price_change = 4;
+}
+
+message UpdateProfileRequest {
+  Profile profile = 1;
+}
+
+message UpdateProfileResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetProfileRequest {
+  string user_id = 1;
+}
+
+message GetProfileResponse {
+  Profile profile = 1;
+}
+
+message ListNotificationsRequest {
+  string user_id = 1;
+  bool unread_only = 2;
+}
+
+message ListNotificationsResponse {
+  repeated Notification notifications = 1;
+}
+
+message MarkNotificationReadRequest {
+  string notification_id = 1;
+}
+
+message MarkNotificationReadResponse {
+  bool success = 1;
+}
+
+service UserProfileService {
+  rpc GetProfile(GetProfileRequest) returns (GetProfileResponse);
+  rpc UpdateProfile(UpdateProfileRequest) returns (UpdateProfileResponse);
+}
+
+service NotificationService {
+  rpc ListNotifications(ListNotificationsRequest) returns (ListNotificationsResponse);
+  rpc MarkNotificationRead(MarkNotificationReadRequest) returns (MarkNotificationReadResponse);
+}

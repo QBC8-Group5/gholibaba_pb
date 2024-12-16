@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+option go_package = "github.com/QBC8-Group5/gholibaba_pb/pb";
+
+import "google/protobuf/timestamp.proto";
+
+enum HotelStatus{
+  HotelStatus_Active = 0;
+  HotelStatus_Blocked = 1;
+}
+
+message Hotel {
+  string hotel_id = 1;
+  string owner_user_id = 2;
+  string hotel_name = 3;
+  string location = 4;
+  HotelStatus status = 5;
+}
+
+enum PricingType {
+  PricingType_Twelve_Hour = 0;
+  PricingType_TwentyFour_Hour = 1;
+}
+
+message Room {
+  string room_id = 1;
+  string hotel_id = 2;
+  string room_type = 3;
+  int32 capacity = 4;
+  float base_price = 5;
+  PricingType pricing_type = 6;
+}
+
+enum RoomReservationStatus{
+  RoomReservationStatus_Active = 0;
+  RoomReservationStatus_CheckedOut = 1;
+  RoomReservationStatus_Cancelled = 2;
+}
+
+message RoomReservation {
+  string reservation_id = 1;
+  string room_id = 2;
+  string user_id = 3;
+  google.protobuf.Timestamp start_time = 4;
+  google.protobuf.Timestamp end_time = 5;
+  float price = 6;
+  RoomReservationStatus status = 7;
+}
+
+message CreateHotelRequest {
+  Hotel hotel = 1;
+}
+
+message CreateHotelResponse {
+  bool success = 1;
+  string hotel_id = 2;
+}
+
+message CreateRoomRequest {
+  Room room = 1;
+}
+
+message CreateRoomResponse {
+  bool success = 1;
+  string room_id = 2;
+}
+
+message ReserveRoomRequest {
+  string room_id = 1;
+  string user_id = 2;
+  google.protobuf.Timestamp start_time = 3;
+  google.protobuf.Timestamp end_time = 4;
+}
+
+message ReserveRoomResponse {
+  bool success = 1;
+  string reservation_id = 2;
+}
+
+message ConfirmCheckoutRequest {
+  string reservation_id = 1;
+}
+
+message ConfirmCheckoutResponse {
+  bool success = 1;
+}
+
+service HotelService {
+  rpc CreateHotel(CreateHotelRequest) returns (CreateHotelResponse);
+  rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse);
+  rpc ReserveRoom(ReserveRoomRequest) returns (ReserveRoomResponse);
+  rpc ConfirmCheckout(ConfirmCheckoutRequest) returns (ConfirmCheckoutResponse);
+}

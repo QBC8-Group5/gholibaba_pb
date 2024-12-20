@@ -1,4 +1,4 @@
-module Bootcamp/Projects/gholibaba_pb
+module github.com/QBC8-Group5/gholibaba_pb
 
 go 1.23.4
 

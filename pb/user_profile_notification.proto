@@ -40,7 +40,16 @@ message UpdateProfileRequest {
   Profile profile = 1;
 }
 
+message CreateProfileRequest {
+  Profile profile = 1;
+}
+
 message UpdateProfileResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message CreateProfileResponse {
   bool success = 1;
   string message = 2;
 }
@@ -72,6 +81,7 @@ message MarkNotificationReadResponse {
 
 service UserProfileService {
   rpc GetProfile(GetProfileRequest) returns (GetProfileResponse);
+  rpc CreateProfile(CreateProfileRequest) returns (CreateProfileResponse);
   rpc UpdateProfile(UpdateProfileRequest) returns (UpdateProfileResponse);
 }
 

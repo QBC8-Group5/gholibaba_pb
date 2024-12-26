@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	UserProfileService_GetProfile_FullMethodName    = "/UserProfileService/GetProfile"
+	UserProfileService_CreateProfile_FullMethodName = "/UserProfileService/CreateProfile"
 	UserProfileService_UpdateProfile_FullMethodName = "/UserProfileService/UpdateProfile"
 )
 
@@ -28,6 +29,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserProfileServiceClient interface {
 	GetProfile(ctx context.Context, in *GetProfileRequest, opts ...grpc.CallOption) (*GetProfileResponse, error)
+	CreateProfile(ctx context.Context, in *CreateProfileRequest, opts ...grpc.CallOption) (*CreateProfileResponse, error)
 	UpdateProfile(ctx context.Context, in *UpdateProfileRequest, opts ...grpc.CallOption) (*UpdateProfileResponse, error)
 }
 
@@ -49,6 +51,16 @@ func (c *userProfileServiceClient) GetProfile(ctx context.Context, in *GetProfil
 	return out, nil
 }
 
+func (c *userProfileServiceClient) CreateProfile(ctx context.Context, in *CreateProfileRequest, opts ...grpc.CallOption) (*CreateProfileResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateProfileResponse)
+	err := c.cc.Invoke(ctx, UserProfileService_CreateProfile_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *userProfileServiceClient) UpdateProfile(ctx context.Context, in *UpdateProfileRequest, opts ...grpc.CallOption) (*UpdateProfileResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UpdateProfileResponse)
@@ -64,6 +76,7 @@ func (c *userProfileServiceClient) UpdateProfile(ctx context.Context, in *Update
 // for forward compatibility.
 type UserProfileServiceServer interface {
 	GetProfile(context.Context, *GetProfileRequest) (*GetProfileResponse, error)
+	CreateProfile(context.Context, *CreateProfileRequest) (*CreateProfileResponse, error)
 	UpdateProfile(context.Context, *UpdateProfileRequest) (*UpdateProfileResponse, error)
 	mustEmbedUnimplementedUserProfileServiceServer()
 }
@@ -77,6 +90,9 @@ type UnimplementedUserProfileServiceServer struct{}
 
 func (UnimplementedUserProfileServiceServer) GetProfile(context.Context, *GetProfileRequest) (*GetProfileResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProfile not implemented")
+}
+func (UnimplementedUserProfileServiceServer) CreateProfile(context.Context, *CreateProfileRequest) (*CreateProfileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateProfile not implemented")
 }
 func (UnimplementedUserProfileServiceServer) UpdateProfile(context.Context, *UpdateProfileRequest) (*UpdateProfileResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateProfile not implemented")
@@ -120,6 +136,24 @@ func _UserProfileService_GetProfile_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserProfileService_CreateProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserProfileServiceServer).CreateProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserProfileService_CreateProfile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserProfileServiceServer).CreateProfile(ctx, req.(*CreateProfileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _UserProfileService_UpdateProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateProfileRequest)
 	if err := dec(in); err != nil {
@@ -148,6 +182,10 @@ var UserProfileService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetProfile",
 			Handler:    _UserProfileService_GetProfile_Handler,
+		},
+		{
+			MethodName: "CreateProfile",
+			Handler:    _UserProfileService_CreateProfile_Handler,
 		},
 		{
 			MethodName: "UpdateProfile",

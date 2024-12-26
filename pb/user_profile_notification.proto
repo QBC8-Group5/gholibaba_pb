@@ -13,6 +13,8 @@ message Profile {
   string address = 6;
   google.protobuf.Timestamp created_at = 7;
   google.protobuf.Timestamp updated_at = 8;
+  string email = 9;
+  string role = 10;
 }
 
 enum NotificationStatus {

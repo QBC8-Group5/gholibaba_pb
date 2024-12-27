@@ -16,6 +16,7 @@ message Profile {
   string email = 9;
   string role = 10;
   google.protobuf.Timestamp deleted_at = 11;
+  string password = 12;
 }
 
 enum NotificationStatus {

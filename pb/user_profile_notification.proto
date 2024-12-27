@@ -15,6 +15,7 @@ message Profile {
   google.protobuf.Timestamp updated_at = 8;
   string email = 9;
   string role = 10;
+  google.protobuf.Timestamp deleted_at = 11;
 }
 
 enum NotificationStatus {
@@ -45,6 +46,7 @@ message UpdateProfileRequest {
 message CreateProfileRequest {
   Profile profile = 1;
 }
+
 
 message UpdateProfileResponse {
   bool success = 1;
